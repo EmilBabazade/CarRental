@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace Data.Entities;
-internal class CarEntity : IUnique, ICar
+public class CarEntity : IUnique, ICar
 {
     [Key]
     public int Id { get; set; }

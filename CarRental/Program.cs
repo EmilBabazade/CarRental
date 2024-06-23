@@ -1,4 +1,6 @@
+using Data;
 using Data.MappingProfiles;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,7 @@ builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddProfile<CarMappingProfile>();
 });
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlite("Data Source = Database.db"));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
