@@ -4,5 +4,5 @@ namespace Clients.BestRentals;
 
 public interface IBestRentalsClient
 {
-    Task<IEnumerable<Car>> GetCars(CancellationToken cancellationToken = default);
+    Task<IEnumerable<Car>> GetCarsAsync(CancellationToken cancellationToken = default);
 }

@@ -3,5 +3,5 @@
 namespace Clients.SouthRentals;
 public interface ISouthRentalsClient
 {
-    Task<IEnumerable<Car>> GetCars(CancellationToken cancellationToken = default);
+    Task<IEnumerable<Car>> GetCarsAsync(CancellationToken cancellationToken = default);
 }

@@ -10,7 +10,7 @@ public class BestRentalsClient(IConfiguration configuration, HttpClient httpClie
     private readonly HttpClient _httpClient = httpClient;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<IEnumerable<Car>> GetCars(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Car>> GetCarsAsync(CancellationToken cancellationToken = default)
     {
         var response = await _httpClient.GetFromJsonAsync<IEnumerable<BestRentalsResponse>>(_configuration["BestRentalsURL"], cancellationToken);
         return _mapper.Map<IEnumerable<Car>>(response);

@@ -4,6 +4,7 @@ using Clients.NorthernRentalsClient;
 using Clients.SouthRentals;
 using Data;
 using Data.MappingProfiles;
+using Data.Repos;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,7 @@ builder.Services.AddDbContext<DataContext>(options => options.UseSqlite("Data So
 builder.Services.AddHttpClient<ISouthRentalsClient, SouthRentalsClient>();
 builder.Services.AddHttpClient<INorthernRentalsClient, NorthernRentalsClient>();
 builder.Services.AddHttpClient<IBestRentalsClient, BestRentalsClient>();
+builder.Services.AddScoped<ICarsRepo, CarsRepo>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

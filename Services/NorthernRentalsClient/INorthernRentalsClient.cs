@@ -4,5 +4,5 @@ namespace Clients.NorthernRentalsClient;
 
 public interface INorthernRentalsClient
 {
-    Task<IEnumerable<Car>?> GetCars(CancellationToken cancellationToken = default);
+    Task<IEnumerable<Car>> GetCarsAsync(CancellationToken cancellationToken = default);
 }
