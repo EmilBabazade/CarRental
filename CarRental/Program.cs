@@ -4,7 +4,7 @@ using Clients.NorthernRentalsClient;
 using Clients.SouthRentals;
 using Data;
 using Data.MappingProfiles;
-using Data.Repos;
+using Data.Repos.Cars;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

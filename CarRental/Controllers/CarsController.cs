@@ -1,7 +1,7 @@
 ﻿using Clients.BestRentals;
 using Clients.NorthernRentalsClient;
 using Clients.SouthRentals;
-using Data.Repos;
+using Data.Repos.Cars;
 using Domain.RentalCar;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,10 +31,10 @@ public class CarsController(ICarsRepo carsRepo, ISouthRentalsClient southRentals
         return Ok();
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("GetAll")]
-    public async Task<ActionResult<IEnumerable<Car>>> GetAllCars(CancellationToken cancellationToken = default)
+    public async Task<ActionResult<IEnumerable<Car>>> GetAllCars([FromBody] FilterDTO? filterDTO, CancellationToken cancellationToken = default)
     {
-        return Ok(await _carsRepo.GetAllCars(cancellationToken));
+        return Ok(await _carsRepo.GetAllCars(filterDTO, cancellationToken));
     }
 }
