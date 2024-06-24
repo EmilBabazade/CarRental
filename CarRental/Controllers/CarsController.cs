@@ -1,9 +1,9 @@
-﻿using Clients.BestRentals;
-using Clients.NorthernRentalsClient;
-using Clients.SouthRentals;
-using Data.Repos.Cars;
+﻿using Data.Repos.Cars;
 using Domain.RentalCar;
 using Microsoft.AspNetCore.Mvc;
+using Services.BestRentals;
+using Services.NorthernRentalsClient;
+using Services.SouthRentals;
 
 namespace CarRental.Controllers;
 [Route("api/[controller]")]

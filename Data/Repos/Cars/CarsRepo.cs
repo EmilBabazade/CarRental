@@ -2,12 +2,15 @@
 using Data.Entities;
 using Domain.RentalCar;
 using Microsoft.EntityFrameworkCore;
+using Services.InMemory;
+using System.Text.Json;
 
 namespace Data.Repos.Cars;
-public class CarsRepo(DataContext dataContext, IMapper mapper) : ICarsRepo
+public class CarsRepo(DataContext dataContext, IMapper mapper, InMemoryCache<IEnumerable<Car>> carCache) : ICarsRepo
 {
     private readonly DataContext _dataContext = dataContext;
     private readonly IMapper _mapper = mapper;
+    private readonly InMemoryCache<IEnumerable<Car>> _carCache = carCache;
 
     public async Task BulkUpsertAsync(IEnumerable<Car> cars, CancellationToken cancellationToken = default)
     {
@@ -31,10 +34,17 @@ public class CarsRepo(DataContext dataContext, IMapper mapper) : ICarsRepo
 
     public async Task<IEnumerable<Car>> GetAllCars(FilterDTO? filter = null, CancellationToken cancellationToken = default)
     {
+        var cacheKey = JsonSerializer.Serialize(filter);
+        var cars = _carCache.Get(cacheKey);
+        if (cars != null) return cars;
         if (filter == null)
         {
-            var cars = await _dataContext.Cars.ToArrayAsync(cancellationToken);
-            return _mapper.Map<IEnumerable<Car>>(cars);
+            var carEntities = await _dataContext.Cars.ToArrayAsync(cancellationToken);
+            cars = _mapper.Map<IEnumerable<Car>>(carEntities);
+            _carCache.Set(cacheKey, cars);
+            // TODO: remove
+            await Task.Delay(5000);
+            return cars;
         }
 
         IQueryable<CarEntity> query = _dataContext.Cars;
@@ -81,6 +91,10 @@ public class CarsRepo(DataContext dataContext, IMapper mapper) : ICarsRepo
         }
 
         var filteredCars = await query.ToArrayAsync(cancellationToken);
-        return _mapper.Map<IEnumerable<Car>>(filteredCars);
+        var res = _mapper.Map<IEnumerable<Car>>(filteredCars);
+        _carCache.Set(cacheKey, res);
+        // TODO: remove
+        await Task.Delay(5000);
+        return res;
     }
 }

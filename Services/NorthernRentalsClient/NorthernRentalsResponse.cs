@@ -1,4 +1,4 @@
-﻿namespace Clients.NorthernRentalsClient;
+﻿namespace Services.NorthernRentalsClient;
 
 public class NorthernRentalsResponse
 {

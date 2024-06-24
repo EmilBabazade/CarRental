@@ -3,7 +3,7 @@ using Domain.RentalCar;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http.Json;
 
-namespace Clients.BestRentals;
+namespace Services.BestRentals;
 public class BestRentalsClient(IConfiguration configuration, HttpClient httpClient, IMapper mapper) : IBestRentalsClient
 {
     private readonly IConfiguration _configuration = configuration;

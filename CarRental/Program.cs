@@ -1,11 +1,12 @@
-using Clients.BestRentals;
-using Clients.MappingProfiles;
-using Clients.NorthernRentalsClient;
-using Clients.SouthRentals;
 using Data;
 using Data.MappingProfiles;
 using Data.Repos.Cars;
+using Domain.RentalCar;
 using Microsoft.EntityFrameworkCore;
+using Services.BestRentals;
+using Services.InMemory;
+using Services.NorthernRentalsClient;
+using Services.SouthRentals;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,8 @@ builder.Services.AddHttpClient<ISouthRentalsClient, SouthRentalsClient>();
 builder.Services.AddHttpClient<INorthernRentalsClient, NorthernRentalsClient>();
 builder.Services.AddHttpClient<IBestRentalsClient, BestRentalsClient>();
 builder.Services.AddScoped<ICarsRepo, CarsRepo>();
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<InMemoryCache<IEnumerable<Car>>, InMemoryCache<IEnumerable<Car>>>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

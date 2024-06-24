@@ -1,6 +1,6 @@
 ﻿using Domain.RentalCar;
 
-namespace Clients.BestRentals;
+namespace Services.BestRentals;
 
 public interface IBestRentalsClient
 {
