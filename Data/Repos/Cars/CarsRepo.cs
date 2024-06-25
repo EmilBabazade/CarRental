@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Data.Caching.InMemory;
 using Data.Entities;
 using Domain.RentalCar;
 using Microsoft.EntityFrameworkCore;
-using Services.InMemory;
 using System.Text.Json;
 
 namespace Data.Repos.Cars;

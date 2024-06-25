@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 
-namespace Services.InMemory;
+namespace Data.Caching.InMemory;
 public class InMemoryCache<T>(IConfiguration configuration, IMemoryCache cache) where T : class
 {
     private readonly IConfiguration _configuration = configuration;

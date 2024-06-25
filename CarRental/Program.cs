@@ -1,10 +1,12 @@
+using CarRental.BackgroundTask;
 using Data;
+using Data.Caching.InMemory;
 using Data.MappingProfiles;
 using Data.Repos.Cars;
 using Domain.RentalCar;
 using Microsoft.EntityFrameworkCore;
 using Services.BestRentals;
-using Services.InMemory;
+using Services.DataSync;
 using Services.NorthernRentalsClient;
 using Services.SouthRentals;
 
@@ -25,6 +27,8 @@ builder.Services.AddHttpClient<IBestRentalsClient, BestRentalsClient>();
 builder.Services.AddScoped<ICarsRepo, CarsRepo>();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<InMemoryCache<IEnumerable<Car>>, InMemoryCache<IEnumerable<Car>>>();
+builder.Services.AddScoped<IDataSyncService, DataSyncService>();
+builder.Services.AddHostedService<DataImport>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
