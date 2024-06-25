@@ -1,18 +1,10 @@
-﻿
-using AutoMapper;
-using Data.MappingProfiles;
-using Data.Repos.Cars;
-using Domain.RentalCar;
-using Services.BestRentals;
-using Services.DataSync;
-using Services.NorthernRentalsClient;
-using Services.SouthRentals;
+﻿using Services.DataSync;
 
 namespace CarRental.BackgroundTask;
 
-public class DataImport(IDataSyncService dataSyncService, IConfiguration configuration) : IHostedService, IDisposable
+public class DataImport(IServiceProvider serviceProvider, IConfiguration configuration) : IHostedService, IDisposable
 {
-    private readonly IDataSyncService _dataSyncService = dataSyncService;
+    private readonly IServiceProvider _serviceProvider = serviceProvider;
     private readonly IConfiguration _configuration = configuration;
     private Timer? _timer = null;
 
@@ -33,6 +25,9 @@ public class DataImport(IDataSyncService dataSyncService, IConfiguration configu
 
     private async void DoWork(object? _)
     {
-        await _dataSyncService.SynchronizeDataAsync();
+        using var scope = _serviceProvider.CreateScope();
+        var dataSyncService = scope.ServiceProvider.GetService<IDataSyncService>();
+        // TODO: handle null dataSyncServiec
+        await dataSyncService.SynchronizeDataAsync();
     }
 }
