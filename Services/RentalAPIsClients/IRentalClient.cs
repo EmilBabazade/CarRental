@@ -1,8 +1,8 @@
 ﻿using Domain.RentalCar;
 
-namespace Services.BestRentals;
+namespace Services.RentalAPIsClients;
 
-public interface IBestRentalsClient
+public interface IRentalClient
 {
     Task<IEnumerable<Car>> GetCarsAsync(CancellationToken cancellationToken = default);
 }

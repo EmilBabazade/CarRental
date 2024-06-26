@@ -5,10 +5,10 @@ using Data.MappingProfiles;
 using Data.Repos.Cars;
 using Domain.RentalCar;
 using Microsoft.EntityFrameworkCore;
-using Services.BestRentals;
 using Services.DataSync;
-using Services.NorthernRentalsClient;
-using Services.SouthRentals;
+using Services.RentalAPIsClients.BestRentals;
+using Services.RentalAPIsClients.NorthernRentalsClient;
+using Services.RentalAPIsClients.SouthRentals;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,9 +21,9 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddProfile<SouthRentalsResponseMappingProfile>();
 });
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlite("Data Source = Database.db"));
-builder.Services.AddHttpClient<ISouthRentalsClient, SouthRentalsClient>();
-builder.Services.AddHttpClient<INorthernRentalsClient, NorthernRentalsClient>();
-builder.Services.AddHttpClient<IBestRentalsClient, BestRentalsClient>();
+builder.Services.AddHttpClient<SouthRentalsClient>();
+builder.Services.AddHttpClient<NorthernRentalsClient>();
+builder.Services.AddHttpClient<BestRentalsClient>();
 builder.Services.AddScoped<ICarsRepo, CarsRepo>();
 builder.Services.AddMemoryCache();
 //builder.Services.AddScoped<ICache<IEnumerable<Car>>, InMemoryCache<IEnumerable<Car>>>();
@@ -39,6 +39,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddLogging();
 
 var app = builder.Build();
 

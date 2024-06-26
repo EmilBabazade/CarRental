@@ -1,4 +1,4 @@
-﻿namespace Services.SouthRentals;
+﻿namespace Services.RentalAPIsClients.SouthRentals;
 
 public class SouthRentalsResponse
 {

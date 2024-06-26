@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Domain.RentalCar;
 
-namespace Services.NorthernRentalsClient;
+namespace Services.RentalAPIsClients.NorthernRentalsClient;
 
 public class NorthernRentalsResponseMappingProfile : Profile
 {

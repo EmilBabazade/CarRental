@@ -1,4 +1,4 @@
-﻿namespace Services.BestRentals;
+﻿namespace Services.RentalAPIsClients.BestRentals;
 
 public class BestRentalsResponse
 {

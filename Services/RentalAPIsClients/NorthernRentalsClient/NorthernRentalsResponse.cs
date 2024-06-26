@@ -1,4 +1,4 @@
-﻿namespace Services.NorthernRentalsClient;
+﻿namespace Services.RentalAPIsClients.NorthernRentalsClient;
 
 public class NorthernRentalsResponse
 {

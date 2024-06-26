@@ -3,8 +3,8 @@ using Domain.RentalCar;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http.Json;
 
-namespace Services.NorthernRentalsClient;
-public class NorthernRentalsClient(IConfiguration configuration, HttpClient httpClient, IMapper mapper) : INorthernRentalsClient
+namespace Services.RentalAPIsClients.BestRentals;
+public class BestRentalsClient(IConfiguration configuration, HttpClient httpClient, IMapper mapper) : IRentalClient
 {
     private readonly IConfiguration _configuration = configuration;
     private readonly HttpClient _httpClient = httpClient;
@@ -12,8 +12,7 @@ public class NorthernRentalsClient(IConfiguration configuration, HttpClient http
 
     public async Task<IEnumerable<Car>> GetCarsAsync(CancellationToken cancellationToken = default)
     {
-        var response =
-            await _httpClient.GetFromJsonAsync<IEnumerable<NorthernRentalsResponse>>(_configuration["NorthernRentalsURL"], cancellationToken);
+        var response = await _httpClient.GetFromJsonAsync<IEnumerable<BestRentalsResponse>>(_configuration["BestRentalsURL"], cancellationToken);
         return _mapper.Map<IEnumerable<Car>>(response);
     }
 }

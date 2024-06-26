@@ -1,21 +1,21 @@
 ﻿using Data.Repos.Cars;
 using Domain.RentalCar;
 using Microsoft.AspNetCore.Mvc;
-using Services.BestRentals;
 using Services.DataSync;
-using Services.NorthernRentalsClient;
-using Services.SouthRentals;
+using Services.RentalAPIsClients.BestRentals;
+using Services.RentalAPIsClients.NorthernRentalsClient;
+using Services.RentalAPIsClients.SouthRentals;
 
 namespace CarRental.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class CarsController(ICarsRepo carsRepo, ISouthRentalsClient southRentalsClient, INorthernRentalsClient northernRentalsClient,
-    IBestRentalsClient bestRentalsClient, IDataSyncService dataSyncService) : ControllerBase
+public class CarsController(ICarsRepo carsRepo, SouthRentalsClient southRentalsClient, NorthernRentalsClient northernRentalsClient,
+    BestRentalsClient bestRentalsClient, IDataSyncService dataSyncService) : ControllerBase
 {
     private readonly ICarsRepo _carsRepo = carsRepo;
-    private readonly ISouthRentalsClient _southRentalsClient = southRentalsClient;
-    private readonly INorthernRentalsClient _northernRentalsClient = northernRentalsClient;
-    private readonly IBestRentalsClient _bestRentalsClient = bestRentalsClient;
+    private readonly SouthRentalsClient _southRentalsClient = southRentalsClient;
+    private readonly NorthernRentalsClient _northernRentalsClient = northernRentalsClient;
+    private readonly BestRentalsClient _bestRentalsClient = bestRentalsClient;
     private readonly IDataSyncService _dataSyncService = dataSyncService;
 
     [HttpGet]
