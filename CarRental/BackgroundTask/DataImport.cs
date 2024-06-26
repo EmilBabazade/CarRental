@@ -15,7 +15,8 @@ public class DataImport(IServiceProvider serviceProvider, IConfiguration configu
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromMinutes(int.Parse(_configuration["CacheTTLInMinutes"])));
+        var expiresInMinutes = _configuration["CacheTTLInMinutes"] == null ? 30 : int.Parse(_configuration["CacheTTLInMinutes"]);
+        _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromMinutes(expiresInMinutes));
     }
 
     public async Task StopAsync(CancellationToken cancellationToken)

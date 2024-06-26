@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
-using Data.Caching.InMemory;
+using Data.Caching;
 using Data.Entities;
 using Domain.RentalCar;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace Data.Repos.Cars;
-public class CarsRepo(DataContext dataContext, IMapper mapper, InMemoryCache<IEnumerable<Car>> carCache) : ICarsRepo
+public class CarsRepo(DataContext dataContext, IMapper mapper, ICache<IEnumerable<Car>> carCache) : ICarsRepo
 {
     private readonly DataContext _dataContext = dataContext;
     private readonly IMapper _mapper = mapper;
-    private readonly InMemoryCache<IEnumerable<Car>> _carCache = carCache;
+    private readonly ICache<IEnumerable<Car>> _carCache = carCache;
 
     public async Task BulkUpsertAsync(IEnumerable<Car> cars, CancellationToken cancellationToken = default)
     {
@@ -35,13 +35,13 @@ public class CarsRepo(DataContext dataContext, IMapper mapper, InMemoryCache<IEn
     public async Task<IEnumerable<Car>> GetAllCars(FilterDTO? filter = null, CancellationToken cancellationToken = default)
     {
         var cacheKey = JsonSerializer.Serialize(filter);
-        var cars = _carCache.Get(cacheKey);
+        var cars = await _carCache.GetAsync(cacheKey, cancellationToken);
         if (cars != null) return cars;
         if (filter == null)
         {
             var carEntities = await _dataContext.Cars.ToArrayAsync(cancellationToken);
             cars = _mapper.Map<IEnumerable<Car>>(carEntities);
-            _carCache.Set(cacheKey, cars);
+            await _carCache.SetAsync(cacheKey, cars, cancellationToken);
             // TODO: remove
             await Task.Delay(5000);
             return cars;
@@ -57,12 +57,12 @@ public class CarsRepo(DataContext dataContext, IMapper mapper, InMemoryCache<IEn
 
         if (filter.ImageURL != null)
         {
-            query = query.Where(c => c.ImageURL == filter.ImageURL);
+            query = query.Where(c => c.ImageURL.ToLower() == filter.ImageURL.ToLower());
         }
 
         if (filter.Currency != null)
         {
-            query = query.Where(c => c.Currency == filter.Currency);
+            query = query.Where(c => c.Currency.ToLower() == filter.Currency.ToLower());
         }
 
         if (filter.Cost != null)
@@ -72,29 +72,29 @@ public class CarsRepo(DataContext dataContext, IMapper mapper, InMemoryCache<IEn
 
         if (filter.LogoURL != null)
         {
-            query = query.Where(c => c.LogoURL == filter.LogoURL);
+            query = query.Where(c => c.LogoURL.ToLower() == filter.LogoURL.ToLower());
         }
 
         if (filter.QuoteNumber != null)
         {
-            query = query.Where(c => c.QuoteNumber == filter.QuoteNumber);
+            query = query.Where(c => c.QuoteNumber.ToLower() == filter.QuoteNumber.ToLower());
         }
 
         if (filter.Sipp != null)
         {
-            query = query.Where(c => c.Sipp == filter.Sipp);
+            query = query.Where(c => c.Sipp.ToLower() == filter.Sipp.ToLower());
         }
 
         if (filter.Vehicle != null)
         {
-            query = query.Where(c => c.Vehicle == filter.Vehicle);
+            query = query.Where(c => c.Vehicle.ToLower() == filter.Vehicle.ToLower());
         }
 
         var filteredCars = await query.ToArrayAsync(cancellationToken);
         var res = _mapper.Map<IEnumerable<Car>>(filteredCars);
-        _carCache.Set(cacheKey, res);
+        await _carCache.SetAsync(cacheKey, res, cancellationToken);
         // TODO: remove
-        await Task.Delay(5000);
+        await Task.Delay(5000, cancellationToken);
         return res;
     }
 }

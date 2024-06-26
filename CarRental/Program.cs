@@ -1,6 +1,6 @@
 using CarRental.BackgroundTask;
 using Data;
-using Data.Caching.InMemory;
+using Data.Caching;
 using Data.MappingProfiles;
 using Data.Repos.Cars;
 using Domain.RentalCar;
@@ -26,9 +26,15 @@ builder.Services.AddHttpClient<INorthernRentalsClient, NorthernRentalsClient>();
 builder.Services.AddHttpClient<IBestRentalsClient, BestRentalsClient>();
 builder.Services.AddScoped<ICarsRepo, CarsRepo>();
 builder.Services.AddMemoryCache();
-builder.Services.AddScoped<InMemoryCache<IEnumerable<Car>>, InMemoryCache<IEnumerable<Car>>>();
+//builder.Services.AddScoped<ICache<IEnumerable<Car>>, InMemoryCache<IEnumerable<Car>>>();
+builder.Services.AddScoped<ICache<IEnumerable<Car>>, RedisCache<IEnumerable<Car>>>();
 builder.Services.AddScoped<IDataSyncService, DataSyncService>();
 builder.Services.AddHostedService<DataImport>();
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration["Redis:ConnectionString"];
+    options.InstanceName = builder.Configuration["Redis:Prefix"];
+});
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
